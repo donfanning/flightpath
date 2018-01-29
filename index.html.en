@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 37.343111, lng: -122.042324},
+          zoom: 11
+        });
+        infoWindow = new google.maps.InfoWindow;
+                // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.'+pos.lat+','+pos.lng);
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+        
+                     var flightPlanCoordinates = [
+          {lat: 37.343111, lng: -122.042324},
+          {lat: 37.772, lng: -122.214},
+          {lat: 37.972, lng: -120.214},
+          {lat: 38.72, lng: -122.214},
+          {lat: 38.972, lng: -120.214},
+          {lat: 38.992, lng: -119.214}
+        ];
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 1
+        });
+
+        flightPath.setMap(map); 
+
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key= AIzaSyBD1Um4rbA_UiHq3upQrjYQG34A9uvRuXU&callback=initMap"
+    async defer></script>
+  </body>
+</html>
