@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Map</title>
+    <title>SaveMySunnySky Flight Paths</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <style>
@@ -36,9 +36,9 @@
               lng: position.coords.longitude
             };
             infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.'+pos.lat+','+pos.lng);
-            infoWindow.open(map);
-            map.setCenter(pos);
+            infoWindow.setContent('Your Location Found.'+pos.lat+','+pos.lng);
+            //infoWindow.open(map);
+            //map.setCenter(pos);
           }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
           });
@@ -46,26 +46,82 @@
           // Browser doesn't support Geolocation
           handleLocationError(false, infoWindow, map.getCenter());
         }
-        
-                     var flightPlanCoordinates = [
-          {lat: 37.343111, lng: -122.042324},
-          {lat: 37.772, lng: -122.214},
-          {lat: 37.972, lng: -120.214},
-          {lat: 38.72, lng: -122.214},
-          {lat: 38.972, lng: -120.214},
-          {lat: 38.992, lng: -119.214}
-        ];
-        var flightPath = new google.maps.Polyline({
-          path: flightPlanCoordinates,
-          geodesic: true,
-          strokeColor: '#FF0000',
-          strokeOpacity: 1.0,
-          strokeWeight: 1
-        });
 
-        flightPath.setMap(map); 
+ 
+        var flightPlanCoordinates = [];
+          
+      var customLabel = {
+        restaurant: {
+          label: 'R'
+        },
+        bar: {
+          label: 'B'
+        }
+      };
 
+          downloadUrl('https://localhost/~xguan/dots.php',function(data)  { 
+
+            var xml = data.responseXML;
+            var markers = 	xml.documentElement.getElementsByTagName('marker');
+            Array.prototype.forEach.call(markers, function(markerElem) {
+            
+            
+              var id = markerElem.getAttribute('id');
+              var flight = markerElem.getAttribute('flight');
+              var point = new google.maps.LatLng(
+                  parseFloat(markerElem.getAttribute('lat')),
+                  parseFloat(markerElem.getAttribute('lng')));
+              flightPlanCoordinates.push(point);
+/*
+              var infowincontent = document.createElement('div');
+              var strong = document.createElement('strong');
+              strong.textContent = name
+              infowincontent.appendChild(strong);
+              infowincontent.appendChild(document.createElement('br'));
+
+              var text = document.createElement('text');
+              text.textContent = id + ': ' + flight;
+              infowincontent.appendChild(text);
+              var icon = customLabel[id] || {};
+              var marker = new google.maps.Marker({
+                map: map,
+                position: point,
+                label: icon.label
+              });
+              marker.addListener('click', function() {
+                infoWindow.setContent(infowincontent);
+                infoWindow.open(map, marker);
+              });
+*/
+            });
+
+          var flightPath = new google.maps.Polyline({
+            path: flightPlanCoordinates,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 1
+          });
+
+          flightPath.setMap(map);
+          });
+            
       }
+
+      function downloadUrl(url, callback) {
+        var request = new XMLHttpRequest;
+
+        request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+            request.onreadystatechange = doNothing;
+            callback(request, request.status);
+          }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
+      }
+      function doNothing() {}
 
       function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
@@ -75,7 +131,7 @@
         infoWindow.open(map);
       }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key= AIzaSyBD1Um4rbA_UiHq3upQrjYQG34A9uvRuXU&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=  AIzaSyDFtc8Ix25xIykMtvbSMBFkxZnW0Z19Wdw&callback=initMap"
     async defer></script>
   </body>
 </html>
