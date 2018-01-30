@@ -1,3 +1,5 @@
+<?php header('Access-Control-Allow-Origin: *'); ?>
+
 <?php
 require("phpsqlajax_dbinfo.php");
 
@@ -26,7 +28,7 @@ if (!$mysqli) {
 
 // Select all the rows in the markers table
 // $query = "SELECT * FROM F2006 limit 100";
-$query = "select * from F2006 where DATE_TIME_UTC > '2006-12-10' and DATE_TIME_UTC < '2006-12-11' order by  FLIGHT_INDEX,DATE_TIME_UTC  limit 100";
+$query = "select * from F2006 where DATE_TIME_UTC > '2006-12-10' and DATE_TIME_UTC < '2006-12-11' order by  FLIGHT_INDEX,DATE_TIME_UTC  limit 10";
 
 $result = $mysqli->query($query);
 if (!$result) {

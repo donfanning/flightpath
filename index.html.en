@@ -48,7 +48,6 @@
         }
 
  
-        var flightPlanCoordinates = [];
           
       var customLabel = {
         restaurant: {
@@ -58,21 +57,38 @@
           label: 'B'
         }
       };
-
-          downloadUrl('https://localhost/~xguan/dots.php',function(data)  { 
-
-            var xml = data.responseXML;
-            var markers = 	xml.documentElement.getElementsByTagName('marker');
-            Array.prototype.forEach.call(markers, function(markerElem) {
-            
-            
-              var id = markerElem.getAttribute('id');
-              var flight = markerElem.getAttribute('flight');
-              var point = new google.maps.LatLng(
-                  parseFloat(markerElem.getAttribute('lat')),
-                  parseFloat(markerElem.getAttribute('lng')));
-              flightPlanCoordinates.push(point);
-/*
+          downloadUrl('https://localhost/~xguan/dots.php',
+            function(data)  { 
+              var xml = data.responseXML;
+              var flights = xml.documentElement.getElementsByTagName('flight');
+              Array.prototype.forEach.call(flights, 
+                function(flightElem) {
+                  var flightPlanCoordinates = [];   
+                  var markers = 	flightElem.childNodes;
+                  Array.prototype.forEach.call(markers, 
+                    function(markerElem) {
+                      var id = markerElem.getAttribute('id');
+                      var flight = markerElem.getAttribute('flight');
+                      var point = new google.maps.LatLng(
+                      parseFloat(markerElem.getAttribute('lat')),
+                      parseFloat(markerElem.getAttribute('lng')));
+                      flightPlanCoordinates.push(point);
+                    }  // func
+                  ) ; 
+                  var flightPath = new google.maps.Polyline({
+                    path: flightPlanCoordinates,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 1
+                  });
+                  flightPath.setMap(map);
+               } // func flightElem
+           ); // forEach flight 
+        } // func data
+       ); // download call
+     } //unction initMap
+     function useless() {
               var infowincontent = document.createElement('div');
               var strong = document.createElement('strong');
               strong.textContent = name
@@ -91,23 +107,9 @@
               marker.addListener('click', function() {
                 infoWindow.setContent(infowincontent);
                 infoWindow.open(map, marker);
-              });
-*/
-            });
+              }); //addListener
 
-          var flightPath = new google.maps.Polyline({
-            path: flightPlanCoordinates,
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 1.0,
-            strokeWeight: 1
-          });
-
-          flightPath.setMap(map);
-          });
-            
-      }
-
+} 
       function downloadUrl(url, callback) {
         var request = new XMLHttpRequest;
 
