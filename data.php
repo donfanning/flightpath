@@ -19,7 +19,7 @@ return $xmlStr;
 }
 
 // Opens a connection to a MySQL server
-$mysqli= new mysqli('localhost', $username, $password, $database);
+$mysqli= new mysqli($mysqlhost, $username, $password, $database);
 if (!$mysqli) {
   die('Not connected : ' . mysql_error());
 }
@@ -31,6 +31,11 @@ $query = "select * from F2006
   and DATE_TIME_UTC < '2006-12-11' 
   and mod(ID,5) = 0 
   and ARR_APRT = 'SJC'
+  order by  FLIGHT_INDEX,DATE_TIME_UTC ";
+
+$query = "select * from F2006
+  where ID < 1000
+  and mod(ID,5) = 0
   order by  FLIGHT_INDEX,DATE_TIME_UTC ";
 
 $result = $mysqli->query($query);

@@ -35,7 +35,9 @@
           // Browser doesn't support Geolocation
           handleLocationError(false, infoWindow, map.getCenter());
         }
-        downloadUrl('https://localhost/~xguan/dots.php',
+        //https://somehost.dns.name/somedirectory
+        hostAddress= top.location.href.toString(); 
+        downloadUrl(hostAddress+'/data.php',
             function(data, status)  { 
               var xml = data.responseXML;
               var flights = xml.documentElement.getElementsByTagName('flight');
