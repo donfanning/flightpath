@@ -1,5 +1,3 @@
-<?php header('Access-Control-Allow-Origin: *'); ?>
-
 <?php
 require("phpsqlajax_dbinfo.php");
 
@@ -26,9 +24,14 @@ if (!$mysqli) {
   die('Not connected : ' . mysql_error());
 }
 
-// Select all the rows in the markers table
+// Select all the rows in the flight table
 // $query = "SELECT * FROM F2006 limit 100";
-$query = "select * from F2006 where DATE_TIME_UTC > '2006-12-10' and DATE_TIME_UTC < '2006-12-11' order by  FLIGHT_INDEX,DATE_TIME_UTC  limit 10";
+$query = "select * from F2006 
+  where DATE_TIME_UTC > '2006-12-10' 
+  and DATE_TIME_UTC < '2006-12-11' 
+  and mod(ID,5) = 0 
+  and ARR_APRT = 'SJC'
+  order by  FLIGHT_INDEX,DATE_TIME_UTC ";
 
 $result = $mysqli->query($query);
 if (!$result) {
@@ -38,7 +41,7 @@ if (!$result) {
 header("Content-type: text/xml");
 $lastFlight = "null";
 // Start XML file, echo parent node
-echo "<markers>\r\n";
+echo "<flights>\r\n";
 
 // Iterate through the rows, printing XML nodes for each
 while ($row = mysqli_fetch_assoc($result)){
@@ -51,14 +54,17 @@ while ($row = mysqli_fetch_assoc($result)){
      }
     $lastFlight = $row['FLIGHT_INDEX'];
      // start a new marker
-    echo '<flight> ';
+    echo '<flight ';
+    echo 'name="' .$row['AIRCRAFT_ID'] .'" ';
+    echo 'src="' .$row['DEP_APRT'] .'" ';
+    echo 'des="' .$row['ARR_APRT'] .'" ';
+    echo 'index="' . $row['FLIGHT_INDEX'] .'">';
   }
   echo '<marker ';
-  echo 'flight="' . parseToXML($row['AIRCRAFT_ID']) . '" ';
-  
   echo 'lat="' . $row['LATITUDE'] . '" ';
   echo 'lng="' . $row['LONGITUDE'] . '" ';
-  echo 'id="' . $row['ID'] . '" ';
+  echo 'altx100ft="' . $row['ALTITUDEx100ft'] . '" ';
+  echo 'datetimeutc="' . $row['DATE_TIME_UTC'] . '"';
   echo "/>\r\n";
 }
 
@@ -69,7 +75,7 @@ if($lastFlight != 'null') {
 }
 
 // End XML file
-echo '</markers>';
+echo '</flights>';
 
 ?>
 
