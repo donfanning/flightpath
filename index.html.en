@@ -8,18 +8,40 @@
   </head>
   <body>
     <div id="floating-panel">
-      <label id="label-status"> Hover mouse over flight path for more info </label>
+      <input id="check-show-waypoints" type="checkbox">
+      <lable>Waypoints</lable>
+      <label id="label-status">bingo </label>
     </div>
+    <div style="clear: both;"></div>
     <div id="map"></div>
-    <div>
-    <form id="formoptions">
-      <select id="mySelect">
-        <option>Apple</option>
-        <option>Pear</option>
-        <option>Banana</option>
-        <option>Orange</option>
-     </select>
-    </form>
+
+    <div id="option-panel">
+  <!-------    <form id="option-form" method="post" action="">
+  ------->
+        <table align="left">
+          <tr>
+             <th></th>
+             <th><label id="option-title">Query Options</label></th>
+             <th></th>
+          </tr>
+          <tr>
+            <th><label>From Date: </lable></th>
+            <th><input id="starting-date" type="date" value="2006-12-01"></th>
+            <th><input id="start-time" type="time" value="00:00:00" step="1"></th>
+          </tr>
+          <tr>
+            <th><label>To Date: </lable></th>
+            <th><input id="ending-date" type="date" value="2006-12-01"></th>
+            <th><input id="ending-time" type="time" value="23:59:59" step="1"></th>
+          </tr>
+          <tr>
+            <th><input id="limit-sjc-arrivals" type="checkbox"><lable>Limit to arrivals at SJC</lable></th>
+            <th><button onclick="validateFormOnSubmit();">Update</button> </th>
+          <tr>
+       </table>
+      </form>
+    </div>
+
     <script type="text/javascript" src="flight.js"></script>
   </body>
 </html>

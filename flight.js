@@ -1,7 +1,7 @@
       var map;
       var flightPlanCoordinates = [];
-
-      /* <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFtc8Ix25xIykMtvbSMBFkxZnW0Z19Wdw&callback=initMap" async defer></script>*/
+      var flightPaths = [];
+      var markers = [];
 
       // load google map script
       var gmap = document.createElement('script');
@@ -9,34 +9,28 @@
       gmap.async = true;
       gmap.defer = true;
       document.head.appendChild(gmap);
+      //Make the DIV element draggagle:
+      dragElement(document.getElementById(("option-panel")));
+      dragElement(document.getElementById(("floating-panel")));
 
       // call back after google map script is loaded
       function initMap() {
+        console.log("initMap got called");
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 37.343111, lng: -122.042324},
           zoom: 11
         });
-        infoWindow = new google.maps.InfoWindow;
-        // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            //infoWindow.setPosition(pos);
-            //infoWindow.setContent('Your Location Found.'+pos.lat+','+pos.lng);
-            //infoWindow.open(map);
-            //map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          });
-        } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false, infoWindow, map.getCenter());
-        }
+        infoWindow = new google.maps.InfoWindow({
+          opacity: .6
+        });
+        drawFlightPath(map);
+     } //function initMap
+
+     function drawFlightPath(map) {
         //https://somehost.dns.name/somedirectory
         hostAddress= top.location.href.toString(); 
+        console.log("drawFlighPath got called");
+        console.log(hostAddress);
         downloadUrl(hostAddress+'/data.php',
             function(data, status)  { 
               var xml = data.responseXML;
@@ -76,14 +70,16 @@
                       document.getElementById('label-status').innerHTML = 'bingo!';
                   });
                   flightPath.addListener('mouseleave', function(){
-                       document.getElementById('label-status').innerHTML = 'bye';
-                  })
+                      document.getElementById('label-status').innerHTML = 'bye';
+                  });
                   flightPlanCoordinates = [];
+                  flightPaths.push(flightPath);
                } // func flightElem
            ); // forEach flight 
         } // func data
      ); // download call
-     } //function initMap
+
+    }
 
      function setmarker(point, alt100ft, flightName, flightSrc, flightDes) {
       //test if it's close to serra park
@@ -106,7 +102,7 @@
 'mi';
       infowincontent.appendChild(text);
       var symbolOne = {
-          path: 'M -2,0 0,-2 2,0 0,2 z',
+          path: 'M -1,0 0,-1 1,0 0,1 z',
           strokeColor: '#F00',
           fillColor: '#F00',
           fillOpacity: 0.5
@@ -121,6 +117,7 @@
           infoWindow.setContent(infowincontent);
           infoWindow.open(map, marker);
         }); //addListener
+       markers.push(marker);
      } 
       function downloadUrl(url, callback) {
         var request = new XMLHttpRequest;
@@ -162,3 +159,70 @@
                               'Error: Your browser doesn\'t support geolocation.');
         infoWindow.open(map);
       }
+
+
+  function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById(elmnt.id + "header")) {
+      /* if present, the header is where you move the DIV from:*/
+      document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    } else {
+      /* otherwise, move the DIV from anywhere inside the DIV:*/
+      elmnt.onmousedown = dragMouseDown;
+    }
+  function dragMouseDown(e) {
+    e = e || window.event;
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    /* stop moving when mouse button is released:*/
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+function clearMap() {
+    markers.forEach(function(marker, index, arr) {
+      marker.setMap(null);
+    });
+   markers=[];
+   flightPaths.forEach(function(flight, index, arr) {
+     flight.setMap(null);
+    });
+   flightPaths=[];
+}
+function validateFormOnSubmit() {
+    sdate = document.getElementById('starting-date').value;
+    console.log("update button clicked "+sdate);
+    clearMap();    
+    drawFlightPath(map);
+    return;
+    var reason = "";
+    reason += validateName(theForm.name);
+    reason += validatePhone(theForm.phone);
+    reason += validateEmail(theForm.emaile);
+
+    if (reason != "") {
+        alert("Some fields need correction:\n" + reason);
+    } else {
+        simpleCart.checkout();
+    }
+    return false;
+}
