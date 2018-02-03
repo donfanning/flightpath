@@ -3,6 +3,7 @@
       var flightPaths = [];
       var markers = [];
       var theData;
+      var waypoints = [];
       // load google map script
       var gmap = document.createElement('script');
       gmap.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDFtc8Ix25xIykMtvbSMBFkxZnW0Z19Wdw&callback=initMap';
@@ -21,11 +22,75 @@
           center: {lat: 37.343111, lng: -122.042324},
           zoom: 11
         });
-        infoWindow = new google.maps.InfoWindow({
-          opacity: .1
-        });
+        infoWindow = new google.maps.InfoWindow();
+        infoWindowWaypoints = new google.maps.InfoWindow();
+        loadWaypoints();
         drawFlightPath(map);
+        loadWaypoints();
+
+      
      } //function initMap
+     function toggleWaypoints(ele) {
+        console.log("showWaypoints:"+ele.checked);
+
+        if (ele.checked) {
+          console.log("showing waypoints");
+          waypoints.forEach(function(marker, index, arr) {
+           marker.setMap(map);
+          });
+        } else {
+          console.log("hiding waypoints");
+          markers.forEach(function(marker, index, arr) {
+            marker.setMap(null);
+          });
+        }
+     }
+    function loadJSON(file, callback) {   
+
+      var xobj = new XMLHttpRequest();
+      xobj.overrideMimeType("application/json");
+      xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+          if (xobj.readyState == 4 && xobj.status == "200") {
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            callback(xobj.responseText);
+          }
+      };
+      xobj.send(null);  
+    }
+ 
+    function loadWaypoints() {
+      loadJSON("waypoints.json", function(response) {
+        var waypoints = JSON.parse(response);
+        console.log(waypoints);
+        waypoints.forEach(function(waypoint) {
+          console.log(waypoint);
+          var latLng = new google.maps.LatLng(waypoint.lat, waypoint.lng);
+            // Creating a marker and putting it on the map
+            var marker = new google.maps.Marker({
+                position: latLng,
+                title: waypoint.title
+            });
+
+
+          var infowincontent = document.createElement('div');
+          var strong = document.createElement('strong');
+          strong.textContent = waypoint.title;
+          infowincontent.appendChild(strong);
+          infowincontent.appendChild(document.createElement('br'));
+          var text = document.createElement('text');
+          text.textContent = waypoint.description;
+          infowincontent.appendChild(text);
+          marker.addListener('click', function() {
+            infoWindowWaypoints.setContent(infowincontent);
+            infoWindowWaypoints.open(map, marker);
+          }); //addListener
+          marker.setMap(map);
+          waypoints.push(markers);
+
+          });
+      });
+    }   
      //test.php?sdate=2006-12-01&stime=00:00:00&edate=2006-12-01&etime=23:59:59
      function drawFlightPath(map, datalink='data.php') {
         //https://somehost.dns.name/somedirectory
@@ -56,7 +121,6 @@
                   //flight time will be the last marker time where flights arrive at airports.
                   flightTime = ''; 
                   var markers = 	flightElem.children;
-                  var markindex = 0;
                   Array.prototype.forEach.call(markers, 
                     function(markerElem) {
                       if (markerElem.nodeName == 'marker') {
@@ -65,8 +129,6 @@
                          parseFloat(markerElem.getAttribute('lng')));
                          flightTime = markerElem.getAttribute('datetimeutc');
                          flightPlanCoordinates.push(point);
-                         if (markindex++ == 0)
-                            console.log("marker 1 for flight:"+flightName);
                          setMarker(point, markerElem.getAttribute('altx100ft'), flightName, flightSrc, flightDes, flightTime);
                       }
                     }  // func
@@ -110,8 +172,6 @@
       if (dist > 6.0)
          return;
       var info = flightName + ' (' + flightSrc + '->' + flightDes + '), Altitude:' + alt100ft + '00ft' + ', Dist:'+dist+ 'mi, ' + 'Time:'+time + ')';
-
-
       var infowincontent = document.createElement('div');
       var strong = document.createElement('strong');
       strong.textContent = flightName; 

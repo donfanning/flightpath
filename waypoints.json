@@ -1,0 +1,38 @@
+[
+{
+    "title": "Serra Park in Sunnyvale",
+    "lat": 37.343019,
+    "lng": -122.044503,
+    "description": "Serra Park. Sunnyvale, CA. Population: 6884 residents. Average age: 46 years old. Homeowners: 85%. U.S. Census 2010."
+  },
+  {
+    "title": "ZORSA Waypoint",
+    "lat":   37.214593,
+    "lng": -122.300011,
+    "description": "ZORSA@Sunnyvale, CA"
+  },
+  {
+    "title": "AMEBY Waypoint",
+    "lat": 	37.221858,
+    "lng": -122.032916,
+    "description": "AMEBY waypoint @ Sunnyvale, CA"
+  },
+  {
+    "title": "DOCAL Waypoint",
+    "lat":   37.151302,
+    "lng": -122.012619,
+    "description": "DOCAL Waypoint@Saratoga, CA"
+  },
+  {
+    "title": "MENLO Waypoint",
+    "lat":   37.274927,
+    "lng": -122.091317,
+    "description": "MENLO Waypoint@East Oaki /akti, CA"
+  },
+  {
+    "title": "Norman Y. Mineta San José International Airport",
+    "lat":   37.214536,
+    "lng": -122.554448,
+    "description": "Norman Y. Mineta San José International Airport"
+  }
+]
