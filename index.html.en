@@ -7,10 +7,16 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <div id="floating-toolbox">
+      <div>
+        <input id="check-show-waypoints" type="checkbox" onchange="toggleWaypoints(this)" checked> <lable>Waypoints</lable>
+      </div>
+      <div>
+        <input id="check-show-markers" type="checkbox" onchange="toggleMarkers(this)" checked> <lable>PointsInfo</lable>
+      </div>
+    </div>
     <div id="floating-panel">
-      <input id="check-show-waypoints" type="checkbox">
-      <lable>Waypoints</lable>
-      <label id="label-status">bingo </label>
+      <div>      <label id="label-status">bingo </label> </div>
     </div>
     <div style="clear: both;"></div>
     <div id="map"></div>
@@ -27,7 +33,7 @@
           <tr>
             <th><label>From Date: </lable></th>
             <th><input id="starting-date" type="date" value="2006-12-01"></th>
-            <th><input id="start-time" type="time" value="00:00:00" step="1"></th>
+            <th><input id="starting-time" type="time" value="00:00:00" step="1"></th>
           </tr>
           <tr>
             <th><label>To Date: </lable></th>
@@ -35,13 +41,19 @@
             <th><input id="ending-time" type="time" value="23:59:59" step="1"></th>
           </tr>
           <tr>
-            <th><input id="limit-sjc-arrivals" type="checkbox"><lable>Limit to arrivals at SJC</lable></th>
-            <th><button onclick="validateFormOnSubmit();">Update</button> </th>
+            <th><div><input id="limit-sjc-arrivals" type="checkbox" checked>
+                     <lable>Limit to arrivals at SJC</lable>
+            </div></th>
+            <th><div><lable>Plotting interval:</lable>
+                     <input id="interval" type="number" min="1" max="10" step="1" value="3"/>
+            </div></th>
+          </tr>
           <tr>
+            <th><button onclick="validateFormOnSubmit();">Update</button> </th>
+          </tr>
        </table>
       </form>
     </div>
-
     <script type="text/javascript" src="flight.js"></script>
   </body>
 </html>

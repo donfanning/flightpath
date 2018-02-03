@@ -2,7 +2,7 @@
       var flightPlanCoordinates = [];
       var flightPaths = [];
       var markers = [];
-
+      var theData;
       // load google map script
       var gmap = document.createElement('script');
       gmap.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDFtc8Ix25xIykMtvbSMBFkxZnW0Z19Wdw&callback=initMap';
@@ -12,6 +12,7 @@
       //Make the DIV element draggagle:
       dragElement(document.getElementById(("option-panel")));
       dragElement(document.getElementById(("floating-panel")));
+      dragElement(document.getElementById(("floating-toolbox")));
 
       // call back after google map script is loaded
       function initMap() {
@@ -21,39 +22,52 @@
           zoom: 11
         });
         infoWindow = new google.maps.InfoWindow({
-          opacity: .6
+          opacity: .1
         });
         drawFlightPath(map);
      } //function initMap
-
-     function drawFlightPath(map) {
+     //test.php?sdate=2006-12-01&stime=00:00:00&edate=2006-12-01&etime=23:59:59
+     function drawFlightPath(map, datalink='data.php') {
         //https://somehost.dns.name/somedirectory
         hostAddress= top.location.href.toString(); 
         console.log("drawFlighPath got called");
         console.log(hostAddress);
-        downloadUrl(hostAddress+'/data.php',
+        downloadUrl(hostAddress+datalink,
             function(data, status)  { 
+              console.log(data.responseText);
               var xml = data.responseXML;
+              theData = new XMLSerializer().serializeToString(xml);
+              //save the raw xml data for viewing
+              //rawtext = document.getElementById('flight-data-xml');
+              //rawtext.textContent = theData;
               var flights = xml.documentElement.getElementsByTagName('flight');
+              
               flightPlanCoordinates = [];
               var flightName = '';
               var flightSrc = '';
               var flightDes = '';
+              var flightTime = '';
              
               Array.prototype.forEach.call(flights, 
                 function(flightElem) {
                   flightName = flightElem.getAttribute('name');
                   flightSrc = flightElem.getAttribute('src');
                   flightDes = flightElem.getAttribute('des');
+                  //flight time will be the last marker time where flights arrive at airports.
+                  flightTime = ''; 
                   var markers = 	flightElem.children;
+                  var markindex = 0;
                   Array.prototype.forEach.call(markers, 
                     function(markerElem) {
                       if (markerElem.nodeName == 'marker') {
                         var point = new google.maps.LatLng(
                          parseFloat(markerElem.getAttribute('lat')),
                          parseFloat(markerElem.getAttribute('lng')));
+                         flightTime = markerElem.getAttribute('datetimeutc');
                          flightPlanCoordinates.push(point);
-                         setmarker(point, markerElem.getAttribute('altx100ft'), flightName, flightSrc, flightDes);
+                         if (markindex++ == 0)
+                            console.log("marker 1 for flight:"+flightName);
+                         setMarker(point, markerElem.getAttribute('altx100ft'), flightName, flightSrc, flightDes, flightTime);
                       }
                     }  // func
                   ) ; 
@@ -66,12 +80,8 @@
                     geodesic: true,
                   });
                   flightPath.setMap(map);
-                  flightPath.addListener('mouseover', function(){
-                      document.getElementById('label-status').innerHTML = 'bingo!';
-                  });
-                  flightPath.addListener('mouseleave', function(){
-                      document.getElementById('label-status').innerHTML = 'bye';
-                  });
+                  console.log("flight:"+flightName);
+                  setFlightPath(flightPath, flightName+' ('+flightSrc+'->'+flightDes+') Arrived at '+flightTime, flightPaths.length);
                   flightPlanCoordinates = [];
                   flightPaths.push(flightPath);
                } // func flightElem
@@ -80,32 +90,43 @@
      ); // download call
 
     }
+     function setFlightPath(flightPath, info, index) {
 
-     function setmarker(point, alt100ft, flightName, flightSrc, flightDes) {
+      flightPath.addListener('mouseover', function(){
+          document.getElementById('label-status').innerHTML = info;
+      });
+
+     }
+   function setMarker(point, alt100ft, flightName, flightSrc, flightDes, time) {
       //test if it's close to serra park
-      var serra = new google.maps.LatLng(37.3405874,-122.0521408);
+      //37.343019, -122.044503
+      var serra = new google.maps.LatLng(37.343019, -122.044503);
       //var dist = google.maps.geometry.spherical.computeDistanceBetween (serra,point);      
        var dist = calculateDistance(serra,point);
       // meter to mile
        dist = dist * 0.000621;
        dist = dist.toPrecision(2);
       //only mark if within 6 miles
-      if (dist > 6)
+      if (dist > 6.0)
          return;
+      var info = flightName + ' (' + flightSrc + '->' + flightDes + '), Altitude:' + alt100ft + '00ft' + ', Dist:'+dist+ 'mi, ' + 'Time:'+time + ')';
+
+
       var infowincontent = document.createElement('div');
       var strong = document.createElement('strong');
       strong.textContent = flightName; 
       infowincontent.appendChild(strong);
       infowincontent.appendChild(document.createElement('br'));
       var text = document.createElement('text');
-      text.textContent = flightSrc + '->' + flightDes + ', altitude:' + alt100ft + '00ft' + ', dist:'+dist+
-'mi';
+      text.textContent = flightSrc + '->' + flightDes + ', Altitude:' + alt100ft + '00ft' + ', Dist:'+dist+'mi, ' + 'Time:'+time;
       infowincontent.appendChild(text);
+
+
       var symbolOne = {
           path: 'M -1,0 0,-1 1,0 0,1 z',
           strokeColor: '#F00',
-          fillColor: '#F00',
-          fillOpacity: 0.5
+          fillColor: '#FF0',
+          fillOpacity: 0.4
       };
 
       var marker = new google.maps.Marker({
@@ -113,9 +134,13 @@
        position: point,
        icon: symbolOne
        });
-       marker.addListener('mouseover', function() {
+       marker.addListener('click', function() {
           infoWindow.setContent(infowincontent);
           infoWindow.open(map, marker);
+        }); //addListener
+
+       marker.addListener('mouseover', function() {
+          document.getElementById('label-status').innerHTML = info;
         }); //addListener
        markers.push(marker);
      } 
@@ -198,31 +223,64 @@
     document.onmousemove = null;
   }
 }
+function toggleMarkers(ele) {
+  console.log("showMarkers:"+ele.checked);
+  
+  if (ele.checked) {
+      console.log("showing markers");
+      markers.forEach(function(marker, index, arr) {
+         marker.setMap(map);
+      });
+ } else {
+      console.log("hiding markers");
+      markers.forEach(function(marker, index, arr) {
+         marker.setMap(null);
+      });
+  }
+}
 function clearMap() {
     markers.forEach(function(marker, index, arr) {
       marker.setMap(null);
+      marker = null;
     });
    markers=[];
    flightPaths.forEach(function(flight, index, arr) {
      flight.setMap(null);
+     flight = null;
     });
    flightPaths=[];
 }
 function validateFormOnSubmit() {
     sdate = document.getElementById('starting-date').value;
-    console.log("update button clicked "+sdate);
-    clearMap();    
-    drawFlightPath(map);
-    return;
-    var reason = "";
-    reason += validateName(theForm.name);
-    reason += validatePhone(theForm.phone);
-    reason += validateEmail(theForm.emaile);
+    stime = document.getElementById('starting-time').value;
+    edate = document.getElementById('ending-date').value;
+    etime = document.getElementById('ending-time').value;
+    limitsjc = document.querySelector('input[id="limit-sjc-arrivals"]');
+    console.log('limit to sjc arrivals:'+limitsjc.checked);
+    interval = document.getElementById('interval').value;
+    console.log("interval="+interval);
 
-    if (reason != "") {
-        alert("Some fields need correction:\n" + reason);
-    } else {
-        simpleCart.checkout();
+    sdt = new Date(sdate+'T'+stime+'Z');
+    edt = new Date(edate+'T'+etime+'Z');
+    if (sdt > edt) {
+      window.alert('Invalid date range, please try again!');
+      return;
     }
+    if (interval < 1)
+      interval = 1;
+    else if (interval > 10)
+      interval = 10;  
+    console.log("starting date: "+sdt+", ending date: "+edt);
+    clearMap();    
+    urlstring='data.php?sdate='+sdate+'&stime='+stime+'&edate='+edate+'&etime='+etime+'&limitsjc='+limitsjc.checked+'&interval='+interval;
+    console.log(urlstring);
+    drawFlightPath(map, urlstring);
     return false;
+}
+
+function showRawFlightData() {
+  console.log(theData);
+ window.open(theData, "", "_blank")
+
+//  myXmlWindow.document.write('<?xml version="1.0" ?>'+theData);
 }
