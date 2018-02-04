@@ -35,6 +35,10 @@
         line-height: 15px;
         padding-left: 5px;
       }
+      #label-total-flight {
+        font-family: 'Roboto','sans-serif';
+        font-weight: bold;
+      }
       #option-panel {
         text-align: left;
         position: absolute;

@@ -8,11 +8,12 @@
   </head>
   <body>
     <div id="floating-toolbox">
+      <div><label id="label-total-flight">Total Flights: 0</label></div>
       <div>
         <input id="check-show-waypoints" type="checkbox" onchange="toggleWaypoints(this)" checked> <lable>Waypoints</lable>
       </div>
       <div>
-        <input id="check-show-markers" type="checkbox" onchange="toggleMarkers(this)" checked> <lable>PointsInfo</lable>
+        <input id="check-show-markers" type="checkbox" onchange="toggleMarkers(this)" checked> <lable>Altitudes</lable>
       </div>
     </div>
     <div id="floating-panel">
@@ -42,14 +43,16 @@
           </tr>
           <tr>
             <th><div><input id="limit-sjc-arrivals" type="checkbox" checked>
-                     <lable>Limit to arrivals at SJC</lable>
+                     <lable>SJCArrivalsOnly</lable>
             </div></th>
             <th><div><lable>Plotting interval:</lable>
                      <input id="interval" type="number" min="1" max="10" step="1" value="3"/>
             </div></th>
           </tr>
           <tr>
+            <th></th>
             <th><button onclick="validateFormOnSubmit();">Update</button> </th>
+            <th></th>
           </tr>
        </table>
       </form>

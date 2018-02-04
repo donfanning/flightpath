@@ -80,12 +80,10 @@
           });
       });
     }   
-     //test.php?sdate=2006-12-01&stime=00:00:00&edate=2006-12-01&etime=23:59:59
+     //data.php?sdate=2006-12-01&stime=00:00:00&edate=2006-12-01&etime=23:59:59
      function drawFlightPath(map, datalink='20061210.xml') {
         //https://somehost.dns.name/somedirectory
         hostAddress= top.location.href.toString(); 
-        //console.log("drawFlighPath got called");
-        console.log(hostAddress+datalink);
         downloadUrl(hostAddress+datalink,
             function(data, status)  { 
               var xml = data.responseXML;
@@ -136,16 +134,18 @@
                   flightPaths.push(flightPath);
                } // func flightElem
            ); // forEach flight 
+               // update the statics
+              //      <div><label id="label-total-flight">Total Flights: 0</label></div>
+              document.getElementById('label-total-flight').innerHTML = 'Total Flights: '+ flightPaths.length;
         } // func data
-     ); // download call
+      ); // download call
+    } //drawFlightPath
 
-    }
      function setFlightPath(flightPath, info, index) {
 
       flightPath.addListener('mouseover', function(){
           document.getElementById('label-status').innerHTML = info;
       });
-
      }
    function setMarker(point, alt100ft, flightName, flightSrc, flightDes, time) {
       //test if it's close to serra park
