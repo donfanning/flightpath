@@ -293,6 +293,8 @@ function clearMap() {
      flight = null;
     });
    flightPaths=[];
+   //clear Total Flights
+   document.getElementById('label-total-flight').innerHTML = 'Total Flights: '+ flightPaths.length;
 }
 function validateFormOnSubmit() {
     sdate = document.getElementById('starting-date').value;

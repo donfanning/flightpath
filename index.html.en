@@ -8,7 +8,8 @@
   </head>
   <body>
     <div id="floating-toolbox">
-      <div><label id="label-total-flight">Total Flights: 0</label></div>
+      
+      <div><b><label id="label-total-flight">Total Flights: 0</label></b></div>
       <div>
         <input id="check-show-waypoints" type="checkbox" onchange="toggleWaypoints(this)" checked> <lable>Waypoints</lable>
       </div>

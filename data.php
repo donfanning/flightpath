@@ -52,7 +52,8 @@ $edtstring = 'str_to_date("'.$edt.'", "%Y-%m-%d %H:%i:%s")';
 
 $intervalstring = ' and mod(ID,'.$interval.') = 0 ';
 
-echo '<root>';
+// echo '<root>';
+
 // Select all the rows in the flight table
 // $query = "SELECT * FROM F2006 limit 100";
 $query = "select * from F2006 
@@ -61,14 +62,13 @@ $query = "select * from F2006
   $intervalstring . $limitsjcstring .
   " order by  FLIGHT_INDEX,DATE_TIME_UTC ";
 
-//echo $query;
 
 $result = $mysqli->query($query);
 if (!$result) {
   die('Invalid query: ' . mysql_error());
 }
 
-echo '<sql statement="hello">'.parseToXML($query).'</sql>';
+// echo '<sql statement="hello">'.parseToXML($query).'</sql>';
 
 
 $lastFlight = "null";
@@ -108,7 +108,7 @@ if($lastFlight != 'null') {
 
 // End XML file
 echo '</flights>';
-echo '</root>';
+// echo '</root>';
 
 ?>
 
