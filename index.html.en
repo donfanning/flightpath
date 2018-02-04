@@ -24,12 +24,10 @@
     <div id="map"></div>
 
     <div id="option-panel">
-  <!-------    <form id="option-form" method="post" action="">
-  ------->
         <table align="left">
           <tr>
              <th></th>
-             <th><label id="option-title">Query Options</label></th>
+             <th><b><label id="option-title">Query Options</label></b></th>
              <th></th>
           </tr>
           <tr>
