@@ -28,10 +28,10 @@ if (!$mysqli) {
   die('Not connected : ' . mysql_error());
 }
 
-$sdate = isset($_GET['sdate']) ? $_GET['sdate'] : '2006-12-01';
+$sdate = isset($_GET['sdate']) ? $_GET['sdate'] : '2006-12-10';
 $stime = isset($_GET['stime']) ? $_GET['stime'] : '00:00:00';
 
-$edate = isset($_GET['edate']) ? $_GET['edate'] : '2006-12-01';
+$edate = isset($_GET['edate']) ? $_GET['edate'] : '2006-12-10';
 $etime = isset($_GET['etime']) ? $_GET['etime'] : '23:59:59';
 
 

@@ -7,32 +7,32 @@
   },
   {
     "title": "ZORSA Waypoint",
-    "lat":   37.214593,
-    "lng": -122.300011,
-    "description": "ZORSA@Sunnyvale, CA"
+    "lat":   37.36296111,
+    "lng": -122.05055556,
+    "description": "ZORSA@Sunnyvale, CA 37-21-46.6600N 122-03-02.3800W"
   },
   {
     "title": "AMEBY Waypoint",
-    "lat": 	37.221858,
-    "lng": -122.032916,
-    "description": "AMEBY waypoint @ Sunnyvale, CA"
+    "lat": 	37.37182778,
+    "lng": -122.05805556,
+    "description": "AMEBY waypoint @ Sunnyvale, CA 37-22-18.5800N 122-03-29.1600W"
   },
   {
     "title": "DOCAL Waypoint",
-    "lat":   37.151302,
-    "lng": -122.012619,
-    "description": "DOCAL Waypoint@Saratoga, CA"
+    "lat":   37.25361667,
+    "lng": -122.02388889,
+    "description": "DOCAL Waypoint@Saratoga, CA, 37-15-13.0200N 122-01-26.1900W"
   },
   {
     "title": "MENLO Waypoint",
-    "lat":   37.274927,
-    "lng": -122.091317,
-    "description": "MENLO Waypoint@East Oaki /akti, CA"
+    "lat":   37.4636861,
+    "lng": -122.15361111,
+    "description": "MENLO Waypoint@East Oaki /akti, CA  http://opennav.com/waypoint/US/MENLO"
   },
   {
     "title": "Norman Y. Mineta San José International Airport",
-    "lat":   37.214536,
-    "lng": -122.554448,
-    "description": "Norman Y. Mineta San José International Airport"
+    "lat":   37.3648583,
+    "lng": -121.9321768,
+    "description": "Norman Y. Mineta San José International Airport, 1521 Airport Blvd, San Jose, CA 95110"
   }
 ]

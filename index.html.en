@@ -32,12 +32,12 @@
           </tr>
           <tr>
             <th><label>From Date: </lable></th>
-            <th><input id="starting-date" type="date" value="2006-12-01"></th>
+            <th><input id="starting-date" type="date" value="2006-12-10"></th>
             <th><input id="starting-time" type="time" value="00:00:00" step="1"></th>
           </tr>
           <tr>
             <th><label>To Date: </lable></th>
-            <th><input id="ending-date" type="date" value="2006-12-01"></th>
+            <th><input id="ending-date" type="date" value="2006-12-10"></th>
             <th><input id="ending-time" type="time" value="23:59:59" step="1"></th>
           </tr>
           <tr>

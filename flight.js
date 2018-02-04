@@ -92,7 +92,7 @@
       });
     }   
      //test.php?sdate=2006-12-01&stime=00:00:00&edate=2006-12-01&etime=23:59:59
-     function drawFlightPath(map, datalink='data.php') {
+     function drawFlightPath(map, datalink='20061210.xml') {
         //https://somehost.dns.name/somedirectory
         hostAddress= top.location.href.toString(); 
         console.log("drawFlighPath got called");
