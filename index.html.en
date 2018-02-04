@@ -16,7 +16,7 @@
       </div>
     </div>
     <div id="floating-panel">
-      <div>      <label id="label-status">bingo </label> </div>
+      <div>      <label id="label-status">SaveMySunnySky.org</label> </div>
     </div>
     <div style="clear: both;"></div>
     <div id="map"></div>

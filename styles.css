@@ -23,17 +23,16 @@
 
       #floating-panel {
         position: absolute;
-        top: 60%;
-        left: 20%;
+        top: 85%;
+        left: 0%;
         z-index: 5;
         background-color: #fff;
-        opacity: .6; 
-        padding: 5px;
-        background-color: rgb(64, 164, 224);
+        opacity: .8; 
+        padding: 2px;
         border: 2px solid #fff;
         text-align: left;
         font-family: 'Roboto','sans-serif';
-        line-height: 30px;
+        line-height: 15px;
         padding-left: 5px;
       }
       #option-panel {
@@ -46,8 +45,8 @@
         background-color: rgb(64, 164, 224);
         padding: 0px;
         border: 2px solid #fff;
-        padding-left: 5px;
-        line-height: 20px;
+        padding-left: 0px;
+        line-height: 15px;
       }
       
       /* Optional: Makes the sample page fill the window. */

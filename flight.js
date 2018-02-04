@@ -17,36 +17,29 @@
 
       // call back after google map script is loaded
       function initMap() {
-        console.log("initMap got called");
+        //console.log("initMap got called");
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 37.343111, lng: -122.042324},
           zoom: 11
         });
         infoWindow = new google.maps.InfoWindow();
         infoWindowWaypoints = new google.maps.InfoWindow();
-        loadWaypoints();
         drawFlightPath(map);
         loadWaypoints();
-
-      
      } //function initMap
-     function toggleWaypoints(ele) {
-        console.log("showWaypoints:"+ele.checked);
 
+     function toggleWaypoints(ele) {
         if (ele.checked) {
-          console.log("showing waypoints");
           waypoints.forEach(function(marker, index, arr) {
            marker.setMap(map);
           });
         } else {
-          console.log("hiding waypoints");
-          markers.forEach(function(marker, index, arr) {
+          waypoints.forEach(function(marker, index, arr) {
             marker.setMap(null);
           });
         }
      }
     function loadJSON(file, callback) {   
-
       var xobj = new XMLHttpRequest();
       xobj.overrideMimeType("application/json");
       xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
@@ -61,18 +54,15 @@
  
     function loadWaypoints() {
       loadJSON("waypoints.json", function(response) {
-        var waypoints = JSON.parse(response);
-        console.log(waypoints);
-        waypoints.forEach(function(waypoint) {
-          console.log(waypoint);
+        var jwaypoints = JSON.parse(response);
+        jwaypoints.forEach(function(waypoint) {
+          //console.log(waypoint);
           var latLng = new google.maps.LatLng(waypoint.lat, waypoint.lng);
             // Creating a marker and putting it on the map
-            var marker = new google.maps.Marker({
+          var marker = new google.maps.Marker({
                 position: latLng,
                 title: waypoint.title
-            });
-
-
+          });
           var infowincontent = document.createElement('div');
           var strong = document.createElement('strong');
           strong.textContent = waypoint.title;
@@ -86,8 +76,7 @@
             infoWindowWaypoints.open(map, marker);
           }); //addListener
           marker.setMap(map);
-          waypoints.push(markers);
-
+          waypoints.push(marker);
           });
       });
     }   
@@ -95,11 +84,10 @@
      function drawFlightPath(map, datalink='20061210.xml') {
         //https://somehost.dns.name/somedirectory
         hostAddress= top.location.href.toString(); 
-        console.log("drawFlighPath got called");
-        console.log(hostAddress);
+        //console.log("drawFlighPath got called");
+        console.log(hostAddress+datalink);
         downloadUrl(hostAddress+datalink,
             function(data, status)  { 
-              console.log(data.responseText);
               var xml = data.responseXML;
               theData = new XMLSerializer().serializeToString(xml);
               //save the raw xml data for viewing
@@ -142,7 +130,7 @@
                     geodesic: true,
                   });
                   flightPath.setMap(map);
-                  console.log("flight:"+flightName);
+                  //console.log("flight:"+flightName);
                   setFlightPath(flightPath, flightName+' ('+flightSrc+'->'+flightDes+') Arrived at '+flightTime, flightPaths.length);
                   flightPlanCoordinates = [];
                   flightPaths.push(flightPath);
@@ -284,15 +272,11 @@
   }
 }
 function toggleMarkers(ele) {
-  console.log("showMarkers:"+ele.checked);
-  
   if (ele.checked) {
-      console.log("showing markers");
       markers.forEach(function(marker, index, arr) {
          marker.setMap(map);
       });
  } else {
-      console.log("hiding markers");
       markers.forEach(function(marker, index, arr) {
          marker.setMap(null);
       });
