@@ -3,7 +3,7 @@ require("phpsqlajax_dbinfo.php");
 
 header("Content-type: text/xml");
 
-//phpsqlajax_dbinfo.php has the following info
+//phpsqlajax_dbinfo.php (not included in git repo) has the following info
 //$hostname="somehost";
 //$username="somedbuser";
 //$password="somedbuser";
