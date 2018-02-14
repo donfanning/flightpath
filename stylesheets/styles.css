@@ -1,0 +1,81 @@
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+
+     #floating-toolbox {
+        position: absolute;
+        top: 30px;
+        left: 20%;
+        z-index: 5;
+        background-color: #fff;
+        opacity: .6;
+        padding: 5px;
+        background-color: rgb(64, 164, 224);
+        border: 2px solid #fff;
+        text-align: left;
+        font-family: 'Roboto','sans-serif';
+        font-size: 10px;
+        line-height: 10px;
+        padding-left: 5px;
+      }
+      #starting-date {
+       width: 150px;
+      }
+      #starting-time {
+       width: 150px;
+      }
+  
+      #ending-date {
+       width: 150px;
+      }
+      #ending-time {
+       width: 150px;
+      }
+
+      #interval {
+       width: 3em;
+      }
+
+      #floating-panel {
+        position: absolute;
+        top: 85%;
+        left: 10px;
+        z-index: 5;
+        background-color: #fff;
+        opacity: .8; 
+        padding: 2px;
+        border: 2px solid #fff;
+        text-align: left;
+        font-family: 'Roboto','sans-serif';
+        font-weight: bold;
+        line-height: 10px;
+        padding-left: 5px;
+        font-size: 10px;
+      }
+
+      #option-panel {
+        text-align: left;
+        position: absolute;
+        top: 30px;
+        left: 60%;
+        display: inline-block;
+        max-width: 600px;
+        opacity: .6;
+        z-index: 5;
+        background-color: rgb(64, 164, 224);
+        padding: 0px;
+        border: 2px solid #fff;
+        padding-left: 1px;
+        line-height: 10px;
+        font-size: 10px;
+      }
+      
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    }
